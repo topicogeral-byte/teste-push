@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Notificação Push com Status</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #status { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Teste de Notificações Push</h2>
+  <button onclick="pedirOuNotificar()">Enviar Notificação</button>
+  <div id="status">Status: aguardando ação...</div>
+
+  <script>
+    const statusDiv = document.getElementById("status");
+
+    function pedirOuNotificar() {
+      if (!("Notification" in window)) {
+        statusDiv.innerText = "Status: Este navegador não suporta notificações.";
+        return;
+      }
+
+      // Se ainda não tiver permissão, pede e já dispara depois
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission().then(function(permissao) {
+          if (permissao === "granted") {
+            statusDiv.innerText = "Status: Permissão concedida ✅";
+            enviarNotificacao();
+          } else {
+            statusDiv.innerText = "Status: Permissão negada ❌";
+          }
+        });
+      } else {
+        statusDiv.innerText = "Status: Permissão já concedida ✅";
+        enviarNotificacao();
+      }
+    }
+
+    function enviarNotificacao() {
+      new Notification("🔔 Notificação de Teste", {
+        body: "Esta é uma notificação simples!",
+        icon: "https://cdn-icons-png.flaticon.com/512/1827/1827272.png"
+      });
+    }
+  </script>
+</body>
+</html>
